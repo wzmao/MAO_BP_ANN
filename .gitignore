@@ -1,2 +1,3 @@
 test3-figure/*
 *.directory
+*.pyc
