@@ -1,7 +1,7 @@
 from mao_bp_ann import *
 
 # Read Data
-f = open('data1', 'r')
+f = open('data2', 'r')
 a = np.matrix([[float(j) for j in i.split()]
                for i in f.read().strip().split('\n')])
 f.close()
@@ -10,14 +10,11 @@ f.close()
 train, test = split_train_test(a)
 
 # Setup the web
-webshape = [4, 10, 10, 3]
+webshape = [2, 2]
 web = neu_web(
     webshape, [train[:, :-1], toclass(train[:, -1], classier=[1, 2, 3])])
 
 # Train data
-web.simulate(1000, step=2.)
-web.simulate(1000, step=1.)
-web.simulate(1000, step=.5)
 web.simulate(1000, step=.1)
 
 # Test data
