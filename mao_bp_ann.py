@@ -68,7 +68,8 @@ class neu_web(object):
         self.trans = []
         if self.webshape:
             for i in range(len(webshape) - 1):
-                self.trans += [np.matrix(np.random.random((webshape[i] + 1, webshape[i + 1])) * (0.1) - 0.05)]
+                self.trans += [
+                    np.matrix(np.random.random((webshape[i] + 1, webshape[i + 1])) * (0.1) - 0.05)]
                 # self.trans += [np.matrix(np.random.random((webshape[i] + 1, webshape[i + 1])))]
 
     def simulate(self, times, step=0.1):
@@ -98,13 +99,15 @@ class neu_web(object):
         for i in range(layer):
             temp = np.concatenate((temp, np.ones((1, 1))), axis=1)
             temp = temp.dot(self.trans[i])
-            temp= 1./(1.+np.exp(-temp))
+            temp = 1. / (1. + np.exp(-temp))
             save = save + [np.array(temp)]
         wucha = [save[-1] * (1 - save[-1]) * (outputd1 - save[-1])]
         for i in reversed(range(layer)):
-            wucha = [save[i] * (1 - save[i]) * np.array(wucha[0].dot(self.trans[i][:-1].T))] + wucha
+            wucha = [
+                save[i] * (1 - save[i]) * np.array(wucha[0].dot(self.trans[i][:-1].T))] + wucha
         for i in range(layer):
-            self.trans[i] = self.trans[i] + (np.concatenate((save[i], np.ones((1, 1))), axis=1).T.dot(wucha[i + 1])) * step
+            self.trans[i] = self.trans[
+                i] + (np.concatenate((save[i], np.ones((1, 1))), axis=1).T.dot(wucha[i + 1])) * step
 
     def test(self, inputtest, outputtest, f):
         if inputtest.shape[0] != outputtest.shape[0]:
@@ -150,33 +153,3 @@ def toclass(a, classier=None):
     for i in range(len(setitem)):
         result[:, i] = (a == setitem[i])
     return result
-
-# Read Data
-f = open('data', 'r')
-a = np.matrix([[float(j) for j in i.split()]
-               for i in f.read().strip().split('\n')])
-f.close()
-
-# Split the train and test set
-train, test = split_train_test(a)
-
-# Setup the web
-webshape = [4, 10, 10, 3]
-web = neu_web(
-    webshape, [train[:, :-1], toclass(train[:, -1], classier=[1, 2, 3])])
-
-# Train data
-web.simulate(1000,step=2.)
-web.simulate(1000,step=1.)
-web.simulate(1000,step=.5)
-web.simulate(1000,step=.1)
-# print web.trans
-
-# Test data
-
-
-def collect(x):
-    return list(x.flat).index(x.max())
-result = web.test(
-    test[:, :-1], toclass(test[:, -1], classier=[1, 2, 3]), f=collect)
-print sum(result) * 1. / len(result),len(result)
