@@ -1,3 +1,4 @@
+from mao_bp_ann import *
 
 # Read Data
 f = open('data', 'r')
@@ -28,4 +29,3 @@ def collect(x):
 result = web.test(
     test[:, :-1], toclass(test[:, -1], classier=[1, 2, 3]), f=collect)
 print sum(result) * 1. / len(result), len(result)
- 
