@@ -12,7 +12,7 @@ train, test = split_train_test(a)
 # Setup the web
 webshape = [2, 2]
 web = neu_web(
-    webshape, [train[:, :-1], toclass(train[:, -1], classier=[1, 2, 3])])
+    webshape, [train[:, :-1], toclass(train[:, -1], classier=[1, 2])])
 
 # Train data
 web.simulate(1000, step=.1)
@@ -24,5 +24,5 @@ def collect(x):
     return list(x.flat).index(x.max())
 
 result = web.test(
-    test[:, :-1], toclass(test[:, -1], classier=[1, 2, 3]), f=collect)
+    test[:, :-1], toclass(test[:, -1], classier=[1, 2]), f=collect)
 print sum(result) * 1. / len(result), len(result)
