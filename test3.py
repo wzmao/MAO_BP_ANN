@@ -19,8 +19,8 @@ train, test = split_train_test(a)
 
 # Setup the web
 webshape = [2, 2]
-web = neu_web(
-    webshape, [train[:, :-1], toclass(train[:, -1], classier=[1, 2])])
+web = neu_net(
+    webshape,['x','y'], [train[:, :-1], toclass(train[:, -1], classier=[1, 2])])
 
 # Train data
 count=0
